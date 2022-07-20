@@ -2,6 +2,8 @@ peterPanSong = "";
 harryPotterSong = "";
 scoreLeftWrist = 0;
 song1_status = "";
+song2_status = "";
+scoreRightWrist = 0;
 function setup(){
     canvas = createCanvas(600, 500);
     canvas.center();
@@ -11,8 +13,8 @@ function setup(){
     posenet.on("pose", gotposes);
 }
 function preload(){
-    peterPanSong = loadSound("music.mp3");
-    harryPotterSong = loadSound("music2.mp3")
+    peterPanSong = loadSound("music2.mp3");
+    harryPotterSong = loadSound("music.mp3")
 }
 function draw(){
     image(video, 0, 0, 600, 500);
@@ -27,6 +29,15 @@ function draw(){
         document.getElementById("song_name").innerHTML = "Playing - Peter Pan Song"
         }
     }
+    if(scoreRightWrist > 0.2){
+        circle(rightWristX, rightWristY, 20);
+        peterPanSong.stop();
+        song2_status = harryPotterSong.isPlaying();
+        if(song2_status == false){
+        harryPotterSong.play();
+        document.getElementById("song_name").innerHTML = "Playing - Song 2"
+        }
+    }
 }
 function modelloaded(){
     console.log("Posenet is initialized");
@@ -39,8 +50,9 @@ function gotposes(results){
         rightWristX = results[0].pose.rightWrist.x;
         rightWristY = results[0].pose.rightWrist.y;
         scoreLeftWrist = results[0].pose.keypoints[9].score;
+        scoreRightWrist = results[0].pose.keypoints[10].score;
         console.log("leftWristX: " + leftWristX + "leftWristY: "  + leftWristY);
         console.log("rightWristX: " + rightWristX + "rightWristY: "  + rightWristY);
-        console.log("scoreLeftWrist: " + scoreLeftWrist);
-    }
+        console.log("scoreLeftWrist: " + scoreLeftWrist + "scoreRightWrist: " + scoreRightWrist);
+    } 
 }
